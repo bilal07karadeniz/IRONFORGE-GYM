@@ -1,19 +1,41 @@
 require('dotenv').config();
 
+// Parse DATABASE_URL if provided (Railway, Heroku, etc.)
+const parseDbUrl = (url) => {
+  if (!url) return null;
+  try {
+    const parsed = new URL(url);
+    return {
+      host: parsed.hostname,
+      port: parseInt(parsed.port, 10) || 5432,
+      database: parsed.pathname.slice(1),
+      user: parsed.username,
+      password: parsed.password,
+    };
+  } catch {
+    return null;
+  }
+};
+
+const dbFromUrl = parseDbUrl(process.env.DATABASE_URL);
+
 const config = {
   env: process.env.NODE_ENV || 'development',
   port: parseInt(process.env.PORT, 10) || 3000,
 
   db: {
-    host: process.env.DB_HOST || 'localhost',
-    port: parseInt(process.env.DB_PORT, 10) || 5432,
-    database: process.env.DB_NAME || 'gym_appointment',
-    user: process.env.DB_USER || 'postgres',
-    password: process.env.DB_PASSWORD || '',
+    // Support DATABASE_URL (Railway/Heroku) or individual variables
+    host: dbFromUrl?.host || process.env.DB_HOST || 'localhost',
+    port: dbFromUrl?.port || parseInt(process.env.DB_PORT, 10) || 5432,
+    database: dbFromUrl?.database || process.env.DB_NAME || 'gym_appointment',
+    user: dbFromUrl?.user || process.env.DB_USER || 'postgres',
+    password: dbFromUrl?.password || process.env.DB_PASSWORD || '',
+    // For Railway PostgreSQL with SSL
+    ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false,
     // Connection pool configuration
     max: 20, // Maximum number of clients in the pool
     idleTimeoutMillis: 30000, // Close idle clients after 30 seconds
-    connectionTimeoutMillis: 2000, // Return an error after 2 seconds if connection could not be established
+    connectionTimeoutMillis: 5000, // Return an error after 5 seconds if connection could not be established
   },
 
   jwt: {
@@ -43,11 +65,17 @@ const config = {
 // Validate required configuration in production
 if (config.env === 'production') {
   const requiredEnvVars = [
-    'DB_HOST',
-    'DB_PASSWORD',
     'JWT_SECRET',
     'JWT_REFRESH_SECRET',
   ];
+
+  // Require either DATABASE_URL or individual DB variables
+  const hasDbUrl = !!process.env.DATABASE_URL;
+  const hasDbVars = process.env.DB_HOST && process.env.DB_PASSWORD;
+
+  if (!hasDbUrl && !hasDbVars) {
+    throw new Error('Missing database configuration: Provide DATABASE_URL or (DB_HOST and DB_PASSWORD)');
+  }
 
   const missingVars = requiredEnvVars.filter(varName => !process.env[varName]);
 
