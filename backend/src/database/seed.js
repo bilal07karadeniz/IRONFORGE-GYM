@@ -20,7 +20,7 @@ const seedData = async () => {
 
       // Create admin user
       console.log('Creating users...');
-      const adminPassword = await bcrypt.hash('Admin123!', config.bcrypt.saltRounds);
+      const adminPassword = await bcrypt.hash('admin123', config.bcrypt.saltRounds);
       const adminResult = await client.query(
         `INSERT INTO users (email, password, full_name, phone, role)
          VALUES ($1, $2, $3, $4, $5)
@@ -30,7 +30,7 @@ const seedData = async () => {
       const adminId = adminResult.rows[0].id;
 
       // Create trainer users
-      const trainerPassword = await bcrypt.hash('Trainer123!', config.bcrypt.saltRounds);
+      const trainerPassword = await bcrypt.hash('trainer123', config.bcrypt.saltRounds);
       const trainersData = [
         { email: 'sarah.johnson@gymfit.com', name: 'Sarah Johnson', phone: '+1-555-0101', specialization: 'Yoga & Pilates', bio: 'Certified yoga instructor with 8 years of experience. Specializes in Vinyasa and Hatha yoga.', years: 8 },
         { email: 'mike.chen@gymfit.com', name: 'Mike Chen', phone: '+1-555-0102', specialization: 'Strength Training', bio: 'Former competitive powerlifter. NSCA certified strength and conditioning specialist.', years: 10 },
@@ -59,7 +59,7 @@ const seedData = async () => {
       }
 
       // Create member users
-      const memberPassword = await bcrypt.hash('Member123!', config.bcrypt.saltRounds);
+      const memberPassword = await bcrypt.hash('member123', config.bcrypt.saltRounds);
       const membersData = [
         { email: 'john.doe@email.com', name: 'John Doe', phone: '+1-555-0201' },
         { email: 'jane.smith@email.com', name: 'Jane Smith', phone: '+1-555-0202' },
@@ -219,9 +219,9 @@ const seedData = async () => {
 
       console.log('Seeding completed successfully!');
       console.log('\n--- Login Credentials ---');
-      console.log('Admin: admin@gymfit.com / Admin123!');
-      console.log('Trainer: sarah.johnson@gymfit.com / Trainer123!');
-      console.log('Member: john.doe@email.com / Member123!');
+      console.log('Admin: admin@gymfit.com / admin123');
+      console.log('Trainer: sarah.johnson@gymfit.com / trainer123');
+      console.log('Member: john.doe@email.com / member123');
       console.log('------------------------\n');
     });
   } catch (error) {

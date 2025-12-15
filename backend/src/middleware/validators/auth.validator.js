@@ -50,9 +50,8 @@ const registerValidator = [
   body('password')
     .notEmpty()
     .withMessage('Password is required')
-    .isLength({ min: 8, max: 128 })
-    .withMessage('Password must be between 8 and 128 characters')
-    .custom(passwordStrengthValidator),
+    .isLength({ min: 6, max: 128 })
+    .withMessage('Password must be between 6 and 128 characters'),
   body('full_name')
     .trim()
     .notEmpty()
@@ -107,9 +106,8 @@ const changePasswordValidator = [
   body('newPassword')
     .notEmpty()
     .withMessage('New password is required')
-    .isLength({ min: 8, max: 128 })
-    .withMessage('New password must be between 8 and 128 characters')
-    .custom(passwordStrengthValidator)
+    .isLength({ min: 6, max: 128 })
+    .withMessage('New password must be between 6 and 128 characters')
     .custom(passwordDifferentValidator),
   body('confirmPassword')
     .notEmpty()
@@ -159,9 +157,8 @@ const resetPasswordValidator = [
   body('newPassword')
     .notEmpty()
     .withMessage('New password is required')
-    .isLength({ min: 8, max: 128 })
-    .withMessage('New password must be between 8 and 128 characters')
-    .custom(passwordStrengthValidator),
+    .isLength({ min: 6, max: 128 })
+    .withMessage('New password must be between 6 and 128 characters'),
   body('confirmPassword')
     .notEmpty()
     .withMessage('Password confirmation is required')

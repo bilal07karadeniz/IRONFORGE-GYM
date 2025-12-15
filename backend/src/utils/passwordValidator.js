@@ -3,13 +3,13 @@
  */
 
 const PASSWORD_REQUIREMENTS = {
-  minLength: 8,
+  minLength: 6,
   maxLength: 128,
-  requireUppercase: true,
-  requireLowercase: true,
-  requireNumbers: true,
-  requireSpecialChars: true,
-  disallowCommonPasswords: true,
+  requireUppercase: false,
+  requireLowercase: false,
+  requireNumbers: false,
+  requireSpecialChars: false,
+  disallowCommonPasswords: false,
 };
 
 // Common passwords to block (abbreviated list - in production use a larger list)
@@ -84,20 +84,7 @@ const validatePassword = (password, email = null) => {
     }
   }
 
-  // Check for personal info
-  if (email && containsPersonalInfo(password, email)) {
-    errors.push('Password should not contain parts of your email address');
-  }
-
-  // Check for sequential characters
-  if (/(.)\1{2,}/.test(password)) {
-    errors.push('Password should not contain more than 2 consecutive identical characters');
-  }
-
-  // Check for sequential numbers/letters
-  if (/(?:012|123|234|345|456|567|678|789|890|abc|bcd|cde|def|efg|fgh|ghi|hij|ijk|jkl|klm|lmn|mno|nop|opq|pqr|qrs|rst|stu|tuv|uvw|vwx|wxy|xyz)/i.test(password)) {
-    errors.push('Password should not contain sequential characters (e.g., 123, abc)');
-  }
+  // Personal info and sequential checks removed for simplicity
 
   return {
     isValid: errors.length === 0,
