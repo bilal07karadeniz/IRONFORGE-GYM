@@ -4,18 +4,19 @@ const { pool, query, transaction } = require('../config/database');
 const config = require('../config');
 
 const seedData = async () => {
-  console.log('Starting database seeding...');
+  console.log('Checking if database needs seeding...');
 
   try {
+    // Check if users table already has data
+    const existingUsers = await query('SELECT COUNT(*) as count FROM users');
+    if (parseInt(existingUsers.rows[0].count) > 0) {
+      console.log('Database already has data. Skipping seed.');
+      return;
+    }
+
+    console.log('Database is empty. Starting seeding...');
+
     await transaction(async (client) => {
-      // Clear existing data (in reverse order of dependencies)
-      console.log('Clearing existing data...');
-      await client.query('DELETE FROM waiting_list');
-      await client.query('DELETE FROM bookings');
-      await client.query('DELETE FROM schedules');
-      await client.query('DELETE FROM classes');
-      await client.query('DELETE FROM trainers');
-      await client.query('DELETE FROM users');
 
       // Create admin user
       console.log('Creating users...');

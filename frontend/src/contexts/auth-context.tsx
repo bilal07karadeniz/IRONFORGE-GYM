@@ -65,8 +65,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       router.push('/dashboard');
     } catch (error: unknown) {
-      const err = error as { response?: { data?: { message?: string } } };
-      const message = err.response?.data?.message || 'Login failed. Please check your credentials.';
+      const err = error as { response?: { data?: { message?: string; errors?: Array<{ field: string; message: string }> } } };
+      const errors = err.response?.data?.errors;
+      let message = err.response?.data?.message || 'Login failed. Please check your credentials.';
+
+      if (errors && errors.length > 0) {
+        message = errors.map(e => e.message).join('. ');
+      }
+
       toast.error('Login Failed', { description: message });
       throw error;
     } finally {
@@ -96,8 +102,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       router.push('/dashboard');
     } catch (error: unknown) {
-      const err = error as { response?: { data?: { message?: string } } };
-      const message = err.response?.data?.message || 'Registration failed. Please try again.';
+      const err = error as { response?: { data?: { message?: string; errors?: Array<{ field: string; message: string }> } } };
+      // Extract specific validation error messages if available
+      const errors = err.response?.data?.errors;
+      let message = err.response?.data?.message || 'Registration failed. Please try again.';
+
+      if (errors && errors.length > 0) {
+        message = errors.map(e => e.message).join('. ');
+      }
+
       toast.error('Registration Failed', { description: message });
       throw error;
     } finally {

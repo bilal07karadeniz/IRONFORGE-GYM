@@ -4,9 +4,9 @@
     "builder": "NIXPACKS"
   },
   "deploy": {
-    "startCommand": "npm start",
+    "startCommand": "npm run migrate:up && npm run seed && npm start",
     "healthcheckPath": "/api/health",
-    "healthcheckTimeout": 100,
+    "healthcheckTimeout": 180,
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 10
   }
