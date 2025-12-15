@@ -11,10 +11,8 @@ export default function ProfilePage() {
     const { user, setUser } = useAuth();
 
     const handleUpdateProfile = async (data: {
-        firstName?: string;
-        lastName?: string;
+        full_name?: string;
         phone?: string;
-        avatar?: string;
     }) => {
         const response = await authApi.updateProfile(data);
         // Update user context

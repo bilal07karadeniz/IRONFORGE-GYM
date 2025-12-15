@@ -26,12 +26,37 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <head>
         <title>IRONFORGE GYM - Push Your Limits</title>
-        <meta name="description" content="Book your gym sessions, track your progress, and achieve your fitness goals with IRONFORGE GYM." />
+        <meta name="description" content="Book your gym sessions, personal training, and fitness classes at IRONFORGE GYM. Track your progress, connect with certified trainers, and achieve your fitness goals with our 24/7 facility." />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="canonical" href="https://ironforge-gym.netlify.app" />
+
+        {/* Open Graph */}
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="IRONFORGE GYM - Push Your Limits" />
+        <meta property="og:description" content="Book your gym sessions, personal training, and fitness classes at IRONFORGE GYM. Track your progress and achieve your fitness goals." />
+        <meta property="og:url" content="https://ironforge-gym.netlify.app" />
+        <meta property="og:site_name" content="IRONFORGE GYM" />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="IRONFORGE GYM - Push Your Limits" />
+        <meta name="twitter:description" content="Book your gym sessions, personal training, and fitness classes at IRONFORGE GYM." />
+
+        {/* Additional SEO */}
+        <meta name="robots" content="index, follow" />
+        <meta name="theme-color" content="#f97316" />
       </head>
       <body
         className={`${outfit.variable} ${bebasNeue.variable} font-sans antialiased min-h-screen`}
       >
         <AuthProvider>
+          {/* Skip Navigation Link for Accessibility */}
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md focus:outline-none"
+          >
+            Skip to main content
+          </a>
           <div className="relative min-h-screen">
             {/* Background Effects */}
             <div className="fixed inset-0 grid-pattern opacity-30 pointer-events-none" />
@@ -39,7 +64,7 @@ export default function RootLayout({
             <div className="fixed bottom-0 right-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
 
             {/* Main Content */}
-            <div className="relative z-10">
+            <div id="main-content" className="relative z-10">
               {children}
             </div>
           </div>

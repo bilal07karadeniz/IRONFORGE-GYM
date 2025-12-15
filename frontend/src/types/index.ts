@@ -2,8 +2,7 @@
 export interface User {
   id: string;
   email: string;
-  firstName: string;
-  lastName: string;
+  full_name: string;
   phone?: string;
   avatar?: string;
   role?: UserRole;
@@ -29,8 +28,7 @@ export interface RegisterData {
   email: string;
   password: string;
   confirmPassword: string;
-  firstName: string;
-  lastName: string;
+  full_name: string;
   phone?: string;
 }
 
@@ -98,8 +96,9 @@ export interface Booking {
 
 export interface Trainer {
   id: string;
-  name: string;
-  specialization: string;
+  name?: string;
+  full_name?: string;
+  specialization?: string;
   avatar?: string;
   bio?: string;
   rating?: number;

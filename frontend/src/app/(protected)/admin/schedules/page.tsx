@@ -98,7 +98,7 @@ export default function AdminSchedulesPage() {
         },
         {
             header: "Trainer",
-            accessorKey: (item: Schedule) => item.trainer.name
+            accessorKey: (item: Schedule) => item.trainer?.name || item.trainer?.full_name || 'Unknown'
         },
         {
             header: "Booked",

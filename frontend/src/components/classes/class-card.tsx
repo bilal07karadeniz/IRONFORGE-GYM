@@ -17,7 +17,8 @@ export function ClassCard({ gymClass, className }: ClassCardProps) {
     const enrollmentPercentage = (gymClass.enrolled / gymClass.capacity) * 100;
     const isNearlyFull = enrollmentPercentage >= 80;
 
-    const trainerInitials = gymClass.trainer.name
+    const trainerName = gymClass.trainer?.name || gymClass.trainer?.full_name || 'Unknown';
+    const trainerInitials = trainerName
         .split(' ')
         .map(n => n[0])
         .join('')
@@ -64,14 +65,14 @@ export function ClassCard({ gymClass, className }: ClassCardProps) {
                     {/* Trainer info */}
                     <div className="flex items-center gap-3">
                         <Avatar className="h-8 w-8 ring-2 ring-border group-hover:ring-primary transition-colors">
-                            <AvatarImage src={gymClass.trainer.avatar} alt={gymClass.trainer.name} />
+                            <AvatarImage src={gymClass.trainer?.avatar} alt={trainerName} />
                             <AvatarFallback className="text-xs bg-muted">
                                 {trainerInitials}
                             </AvatarFallback>
                         </Avatar>
                         <div className="flex-1 min-w-0">
                             <p className="text-sm font-medium text-foreground line-clamp-1">
-                                {gymClass.trainer.name}
+                                {trainerName}
                             </p>
                             <p className="text-xs text-muted-foreground line-clamp-1">
                                 {gymClass.trainer.specialization}

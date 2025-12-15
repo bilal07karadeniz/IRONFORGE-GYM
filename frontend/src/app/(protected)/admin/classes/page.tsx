@@ -116,7 +116,7 @@ export default function AdminClassesPage() {
         },
         {
             header: "Trainer",
-            accessorKey: (item: GymClass) => item.trainer.name
+            accessorKey: (item: GymClass) => item.trainer?.name || item.trainer?.full_name || 'Unknown'
         },
         {
             header: "Duration",

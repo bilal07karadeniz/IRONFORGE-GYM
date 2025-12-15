@@ -37,8 +37,13 @@ export function Navbar() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const getInitials = (firstName?: string, lastName?: string) => {
-    return `${firstName?.charAt(0) || ""}${lastName?.charAt(0) || ""}`.toUpperCase();
+  const getInitials = (fullName?: string) => {
+    if (!fullName) return "";
+    const parts = fullName.trim().split(/\s+/);
+    if (parts.length >= 2) {
+      return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
+    }
+    return fullName.slice(0, 2).toUpperCase();
   };
 
   return (
@@ -92,11 +97,11 @@ export function Navbar() {
                       <Avatar className="h-8 w-8 border border-border">
                         <AvatarImage src={user?.avatar} />
                         <AvatarFallback className="bg-primary/10 text-primary text-xs font-semibold">
-                          {getInitials(user?.firstName, user?.lastName)}
+                          {getInitials(user?.full_name)}
                         </AvatarFallback>
                       </Avatar>
                       <span className="text-sm font-medium">
-                        {user?.firstName}
+                        {user?.full_name?.split(' ')[0]}
                       </span>
                       <ChevronDown className="h-4 w-4 text-muted-foreground" />
                     </Button>
@@ -104,7 +109,7 @@ export function Navbar() {
                   <DropdownMenuContent align="end" className="w-56">
                     <div className="px-2 py-1.5">
                       <p className="text-sm font-medium">
-                        {user?.firstName} {user?.lastName}
+                        {user?.full_name}
                       </p>
                       <p className="text-xs text-muted-foreground">
                         {user?.email}
@@ -158,12 +163,12 @@ export function Navbar() {
                         <Avatar className="h-12 w-12 border-2 border-primary">
                           <AvatarImage src={user?.avatar} />
                           <AvatarFallback className="bg-primary/10 text-primary font-semibold">
-                            {getInitials(user?.firstName, user?.lastName)}
+                            {getInitials(user?.full_name)}
                           </AvatarFallback>
                         </Avatar>
                         <div>
                           <p className="font-semibold">
-                            {user?.firstName} {user?.lastName}
+                            {user?.full_name}
                           </p>
                           <p className="text-sm text-muted-foreground">
                             {user?.email}

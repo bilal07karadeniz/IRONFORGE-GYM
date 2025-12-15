@@ -38,15 +38,15 @@ export default function AdminUsersPage() {
             // Mock data for demo
             const mockUsers: any[] = [
                 {
-                    id: "1", firstName: "John", lastName: "Doe", email: "john@example.com",
+                    id: "1", full_name: "John Doe", email: "john@example.com",
                     role: "user", membershipType: "premium", createdAt: "2023-01-15T00:00:00Z"
                 },
                 {
-                    id: "2", firstName: "Mike", lastName: "Johnson", email: "mike@gym.com",
-                    role: "trainer", specialization: "HIIT", createdAt: "2023-02-01T00:00:00Z"
+                    id: "2", full_name: "Mike Johnson", email: "mike@gym.com",
+                    role: "trainer", createdAt: "2023-02-01T00:00:00Z"
                 },
                 {
-                    id: "3", firstName: "Sarah", lastName: "Admin", email: "sarah@gym.com",
+                    id: "3", full_name: "Sarah Admin", email: "sarah@gym.com",
                     role: "admin", createdAt: "2022-12-01T00:00:00Z"
                 },
             ];
@@ -72,7 +72,7 @@ export default function AdminUsersPage() {
     };
 
     const handleDelete = async (user: User) => {
-        if (!confirm(`Are you sure you want to delete ${user.firstName} ${user.lastName}?`)) return;
+        if (!confirm(`Are you sure you want to delete ${user.full_name}?`)) return;
 
         try {
             await adminApi.deleteUser(user.id);
@@ -83,9 +83,16 @@ export default function AdminUsersPage() {
         }
     };
 
+    const getInitials = (fullName: string) => {
+        const parts = fullName.trim().split(/\s+/);
+        if (parts.length >= 2) {
+            return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
+        }
+        return fullName.slice(0, 2).toUpperCase();
+    };
+
     const filteredUsers = users.filter(user =>
-        user.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.full_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         user.email.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
@@ -96,10 +103,10 @@ export default function AdminUsersPage() {
                 <div className="flex items-center gap-3">
                     <Avatar className="h-8 w-8">
                         <AvatarImage src={user.avatar} />
-                        <AvatarFallback>{user.firstName[0]}{user.lastName[0]}</AvatarFallback>
+                        <AvatarFallback>{getInitials(user.full_name)}</AvatarFallback>
                     </Avatar>
                     <div>
-                        <p className="font-medium">{user.firstName} {user.lastName}</p>
+                        <p className="font-medium">{user.full_name}</p>
                         <p className="text-xs text-muted-foreground">{user.email}</p>
                     </div>
                 </div>

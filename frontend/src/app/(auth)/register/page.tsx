@@ -12,7 +12,6 @@ import {
   User,
   Phone,
   ArrowRight,
-  Check,
 } from "lucide-react";
 import { useAuth } from "@/contexts/auth-context";
 import { registerSchema, RegisterFormData } from "@/lib/validations";
@@ -21,13 +20,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LoadingSpinner } from "@/components/ui/loading";
-
-const passwordRequirements = [
-  { label: "At least 8 characters", test: (p: string) => p.length >= 8 },
-  { label: "One uppercase letter", test: (p: string) => /[A-Z]/.test(p) },
-  { label: "One lowercase letter", test: (p: string) => /[a-z]/.test(p) },
-  { label: "One number", test: (p: string) => /\d/.test(p) },
-];
 
 export default function RegisterPage() {
   const { register: registerUser } = useAuth();
@@ -38,21 +30,17 @@ export default function RegisterPage() {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
+      full_name: "",
       email: "",
       phone: "",
       password: "",
       confirmPassword: "",
     },
   });
-
-  const password = watch("password", "");
 
   const onSubmit = async (data: RegisterFormData) => {
     setIsSubmitting(true);
@@ -71,43 +59,23 @@ export default function RegisterPage() {
       subtitle="Create your account and start your transformation"
     >
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-        {/* Name Fields */}
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="firstName">First Name</Label>
-            <div className="relative">
-              <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-              <Input
-                id="firstName"
-                placeholder="John"
-                className="pl-10 h-12 bg-input border-border focus:border-primary"
-                {...register("firstName")}
-              />
-            </div>
-            {errors.firstName && (
-              <p className="text-xs text-destructive">
-                {errors.firstName.message}
-              </p>
-            )}
+        {/* Full Name Field */}
+        <div className="space-y-2">
+          <Label htmlFor="full_name">Full Name</Label>
+          <div className="relative">
+            <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+            <Input
+              id="full_name"
+              placeholder="John Doe"
+              className="pl-10 h-12 bg-input border-border focus:border-primary"
+              {...register("full_name")}
+            />
           </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="lastName">Last Name</Label>
-            <div className="relative">
-              <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-              <Input
-                id="lastName"
-                placeholder="Doe"
-                className="pl-10 h-12 bg-input border-border focus:border-primary"
-                {...register("lastName")}
-              />
-            </div>
-            {errors.lastName && (
-              <p className="text-xs text-destructive">
-                {errors.lastName.message}
-              </p>
-            )}
-          </div>
+          {errors.full_name && (
+            <p className="text-xs text-destructive">
+              {errors.full_name.message}
+            </p>
+          )}
         </div>
 
         {/* Email Field */}
@@ -175,28 +143,9 @@ export default function RegisterPage() {
           {errors.password && (
             <p className="text-sm text-destructive">{errors.password.message}</p>
           )}
-
-          {/* Password Requirements */}
-          {password && (
-            <div className="grid grid-cols-2 gap-2 pt-2">
-              {passwordRequirements.map((req) => {
-                const met = req.test(password);
-                return (
-                  <div
-                    key={req.label}
-                    className={`flex items-center gap-2 text-xs ${
-                      met ? "text-primary" : "text-muted-foreground"
-                    }`}
-                  >
-                    <Check
-                      className={`h-3 w-3 ${met ? "opacity-100" : "opacity-30"}`}
-                    />
-                    {req.label}
-                  </div>
-                );
-              })}
-            </div>
-          )}
+          <p className="text-xs text-muted-foreground">
+            Password must be 6-128 characters
+          </p>
         </div>
 
         {/* Confirm Password Field */}

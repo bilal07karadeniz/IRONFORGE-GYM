@@ -71,7 +71,8 @@ export default function ClassDetailPage() {
     const isNearlyFull = enrollmentPercentage >= 80;
     const spotsLeft = gymClass.capacity - gymClass.enrolled;
 
-    const trainerInitials = gymClass.trainer.name
+    const trainerName = gymClass.trainer?.name || gymClass.trainer?.full_name || 'Unknown';
+    const trainerInitials = trainerName
         .split(' ')
         .map(n => n[0])
         .join('')
@@ -140,13 +141,13 @@ export default function ClassDetailPage() {
                             <h2 className="text-2xl font-semibold mb-6">Meet Your Trainer</h2>
                             <div className="flex items-start gap-4">
                                 <Avatar className="h-20 w-20 ring-2 ring-primary">
-                                    <AvatarImage src={gymClass.trainer.avatar} alt={gymClass.trainer.name} />
+                                    <AvatarImage src={gymClass.trainer?.avatar} alt={trainerName} />
                                     <AvatarFallback className="text-xl bg-muted">
                                         {trainerInitials}
                                     </AvatarFallback>
                                 </Avatar>
                                 <div className="flex-1">
-                                    <h3 className="text-xl font-semibold mb-1">{gymClass.trainer.name}</h3>
+                                    <h3 className="text-xl font-semibold mb-1">{trainerName}</h3>
                                     <p className="text-primary font-medium mb-2">{gymClass.trainer.specialization}</p>
                                     {gymClass.trainer.rating && (
                                         <div className="flex items-center gap-2 mb-3">

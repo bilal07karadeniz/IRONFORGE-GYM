@@ -38,7 +38,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       try {
         const response = await authApi.getProfile();
-        setUser(response.data.user || response.data);
+        // Backend returns { success: true, data: { user } } or { success: true, data: user }
+        const userData = response.data.data?.user || response.data.data || response.data.user || response.data;
+        setUser(userData);
       } catch (error) {
         console.error('Auth check failed:', error);
         clearTokens();
@@ -54,13 +56,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setIsLoading(true);
     try {
       const response = await authApi.login(credentials.email, credentials.password);
-      const { user: userData, accessToken, refreshToken } = response.data;
+      // Backend returns { success: true, data: { user, accessToken, refreshToken } }
+      const { user: userData, accessToken, refreshToken } = response.data.data;
 
       setTokens(accessToken, refreshToken);
       setUser(userData);
 
       toast.success('Welcome back!', {
-        description: `Logged in as ${userData.firstName}`,
+        description: `Logged in as ${userData.full_name}`,
       });
 
       router.push('/dashboard');
@@ -86,12 +89,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const response = await authApi.register({
         email: data.email,
         password: data.password,
-        firstName: data.firstName,
-        lastName: data.lastName,
+        full_name: data.full_name,
         phone: data.phone,
       });
 
-      const { user: userData, accessToken, refreshToken } = response.data;
+      // Backend returns { success: true, data: { user, accessToken, refreshToken } }
+      const { user: userData, accessToken, refreshToken } = response.data.data;
 
       setTokens(accessToken, refreshToken);
       setUser(userData);
@@ -148,7 +151,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const refreshUser = useCallback(async () => {
     try {
       const response = await authApi.getProfile();
-      setUser(response.data.user || response.data);
+      const userData = response.data.data?.user || response.data.data || response.data.user || response.data;
+      setUser(userData);
     } catch (error) {
       console.error('Failed to refresh user:', error);
     }

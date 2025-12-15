@@ -48,7 +48,8 @@ export function BookingModal({
 
     if (!schedule) return null;
 
-    const trainerInitials = schedule.trainer.name
+    const trainerName = schedule.trainer?.name || schedule.trainer?.full_name || 'Unknown';
+    const trainerInitials = trainerName
         .split(' ')
         .map(n => n[0])
         .join('')
@@ -163,12 +164,12 @@ export function BookingModal({
 
                                     <div className="flex items-center gap-3 text-sm">
                                         <Avatar className="h-5 w-5 ring-1 ring-border">
-                                            <AvatarImage src={schedule.trainer.avatar} alt={schedule.trainer.name} />
+                                            <AvatarImage src={schedule.trainer?.avatar} alt={trainerName} />
                                             <AvatarFallback className="text-xs bg-muted">
                                                 {trainerInitials}
                                             </AvatarFallback>
                                         </Avatar>
-                                        <span className="text-foreground">{schedule.trainer.name}</span>
+                                        <span className="text-foreground">{trainerName}</span>
                                     </div>
                                 </div>
 

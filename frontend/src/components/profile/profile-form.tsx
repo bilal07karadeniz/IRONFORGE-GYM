@@ -10,14 +10,22 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Card } from "../ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Loader2, Upload } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 const profileSchema = z.object({
-    firstName: z.string().min(1, "First name is required"),
-    lastName: z.string().min(1, "Last name is required"),
-    phone: z.string().optional(),
-    avatar: z.string().optional(),
+    full_name: z
+        .string()
+        .min(1, "Full name is required")
+        .min(2, "Full name must be at least 2 characters")
+        .max(100, "Full name must be less than 100 characters"),
+    phone: z
+        .string()
+        .optional()
+        .refine(
+            (val) => !val || (val.length >= 7 && val.length <= 20 && /^[\d\s\-+()]+$/.test(val)),
+            "Phone must be 7-20 characters"
+        ),
 });
 
 type ProfileFormData = z.infer<typeof profileSchema>;
@@ -27,9 +35,17 @@ interface ProfileFormProps {
     onUpdate: (data: ProfileFormData) => Promise<void>;
 }
 
+// Helper to get initials from full name
+function getInitials(fullName: string): string {
+    const parts = fullName.trim().split(/\s+/);
+    if (parts.length >= 2) {
+        return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
+    }
+    return fullName.slice(0, 2).toUpperCase();
+}
+
 export function ProfileForm({ user, onUpdate }: ProfileFormProps) {
     const [isLoading, setIsLoading] = useState(false);
-    const [avatarPreview, setAvatarPreview] = useState(user.avatar || "");
 
     const {
         register,
@@ -38,10 +54,8 @@ export function ProfileForm({ user, onUpdate }: ProfileFormProps) {
     } = useForm<ProfileFormData>({
         resolver: zodResolver(profileSchema),
         defaultValues: {
-            firstName: user.firstName,
-            lastName: user.lastName,
+            full_name: user.full_name,
             phone: user.phone || "",
-            avatar: user.avatar || "",
         },
     });
 
@@ -50,8 +64,13 @@ export function ProfileForm({ user, onUpdate }: ProfileFormProps) {
             setIsLoading(true);
             await onUpdate(data);
             toast.success("Profile updated successfully!");
-        } catch (error: any) {
-            const message = error.response?.data?.message || "Failed to update profile";
+        } catch (error: unknown) {
+            const err = error as { response?: { data?: { message?: string; errors?: Array<{ message: string }> } } };
+            const errors = err.response?.data?.errors;
+            let message = err.response?.data?.message || "Failed to update profile";
+            if (errors && errors.length > 0) {
+                message = errors.map(e => e.message).join('. ');
+            }
             toast.error(message);
         } finally {
             setIsLoading(false);
@@ -64,27 +83,16 @@ export function ProfileForm({ user, onUpdate }: ProfileFormProps) {
             <Card className="p-6">
                 <div className="flex items-center gap-6">
                     <Avatar className="h-24 w-24 ring-4 ring-border">
-                        <AvatarImage src={avatarPreview || user.avatar} alt={user.firstName} />
+                        <AvatarImage src={user.avatar} alt={user.full_name} />
                         <AvatarFallback className="text-2xl bg-primary/10">
-                            {user.firstName[0]}{user.lastName[0]}
+                            {getInitials(user.full_name)}
                         </AvatarFallback>
                     </Avatar>
                     <div className="flex-1">
                         <h3 className="font-semibold mb-2">Profile Picture</h3>
-                        <p className="text-sm text-muted-foreground mb-3">
-                            Upload a new avatar or enter an image URL
+                        <p className="text-sm text-muted-foreground">
+                            Your profile avatar is generated from your name
                         </p>
-                        <div className="flex gap-2">
-                            <Input
-                                {...register("avatar")}
-                                onChange={(e) => setAvatarPreview(e.target.value)}
-                                placeholder="Image URL"
-                                className="flex-1"
-                            />
-                            <Button type="button" variant="outline" size="icon">
-                                <Upload className="h-4 w-4" />
-                            </Button>
-                        </div>
                     </div>
                 </div>
             </Card>
@@ -94,26 +102,14 @@ export function ProfileForm({ user, onUpdate }: ProfileFormProps) {
                 <h3 className="font-semibold mb-4">Personal Information</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                        <Label htmlFor="firstName">First Name</Label>
+                        <Label htmlFor="full_name">Full Name</Label>
                         <Input
-                            id="firstName"
-                            {...register("firstName")}
-                            placeholder="John"
+                            id="full_name"
+                            {...register("full_name")}
+                            placeholder="John Doe"
                         />
-                        {errors.firstName && (
-                            <p className="text-sm text-destructive">{errors.firstName.message}</p>
-                        )}
-                    </div>
-
-                    <div className="space-y-2">
-                        <Label htmlFor="lastName">Last Name</Label>
-                        <Input
-                            id="lastName"
-                            {...register("lastName")}
-                            placeholder="Doe"
-                        />
-                        {errors.lastName && (
-                            <p className="text-sm text-destructive">{errors.lastName.message}</p>
+                        {errors.full_name && (
+                            <p className="text-sm text-destructive">{errors.full_name.message}</p>
                         )}
                     </div>
 

@@ -111,8 +111,7 @@ export const authApi = {
   register: (data: {
     email: string;
     password: string;
-    firstName: string;
-    lastName: string;
+    full_name: string;
     phone?: string;
   }) => api.post('/auth/register', data),
 
@@ -127,11 +126,9 @@ export const authApi = {
   getProfile: () => api.get('/auth/profile'),
 
   updateProfile: (data: {
-    firstName?: string;
-    lastName?: string;
+    full_name?: string;
     phone?: string;
-    avatar?: string;
-  }) => api.patch('/auth/profile', data),
+  }) => api.put('/auth/profile', data),
 
   refreshToken: (refreshToken: string) =>
     api.post('/auth/refresh', { refreshToken }),

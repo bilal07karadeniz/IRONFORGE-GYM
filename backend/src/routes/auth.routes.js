@@ -97,6 +97,12 @@ router.get('/me',
   authController.getCurrentUser
 );
 
+// Alias for /me (frontend compatibility)
+router.get('/profile',
+  authenticate,
+  authController.getCurrentUser
+);
+
 // Update user profile - rate limited to 10 per hour
 router.put('/profile',
   authenticate,

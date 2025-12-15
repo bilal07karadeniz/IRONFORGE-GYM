@@ -192,7 +192,7 @@ function filterAndSortClasses(classes: GymClass[], filters: ClassFilters): GymCl
         filtered = filtered.filter(c =>
             c.name.toLowerCase().includes(searchLower) ||
             c.description.toLowerCase().includes(searchLower) ||
-            c.trainer.name.toLowerCase().includes(searchLower)
+            (c.trainer?.name || c.trainer?.full_name || '').toLowerCase().includes(searchLower)
         );
     }
 

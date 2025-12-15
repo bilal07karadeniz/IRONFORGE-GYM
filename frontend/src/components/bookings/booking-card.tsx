@@ -46,7 +46,8 @@ export function BookingCard({
     const [showCancelDialog, setShowCancelDialog] = useState(false);
     const [isCancelling, setIsCancelling] = useState(false);
 
-    const trainerInitials = booking.schedule.trainer.name
+    const trainerName = booking.schedule.trainer?.name || booking.schedule.trainer?.full_name || 'Unknown';
+    const trainerInitials = trainerName
         .split(' ')
         .map(n => n[0])
         .join('')
@@ -128,10 +129,10 @@ export function BookingCard({
                             </div>
                             <div className="flex items-center gap-2">
                                 <Avatar className="h-4 w-4 ring-1 ring-border">
-                                    <AvatarImage src={booking.schedule.trainer.avatar} />
+                                    <AvatarImage src={booking.schedule.trainer?.avatar} />
                                     <AvatarFallback className="text-xs">{trainerInitials}</AvatarFallback>
                                 </Avatar>
-                                <span className="line-clamp-1">{booking.schedule.trainer.name}</span>
+                                <span className="line-clamp-1">{trainerName}</span>
                             </div>
                         </div>
 

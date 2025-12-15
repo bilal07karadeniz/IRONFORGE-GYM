@@ -30,7 +30,8 @@ export function TimeSlotCard({
     const canBook = !isFull && !isPastSchedule && !isBooked;
     const canJoinWaitlist = isFull && !isPastSchedule && !isBooked;
 
-    const trainerInitials = schedule.trainer.name
+    const trainerName = schedule.trainer?.name || schedule.trainer?.full_name || 'Unknown';
+    const trainerInitials = trainerName
         .split(' ')
         .map(n => n[0])
         .join('')
@@ -80,14 +81,14 @@ export function TimeSlotCard({
                     {/* Trainer */}
                     <div className="flex items-center gap-2">
                         <Avatar className="h-6 w-6 ring-1 ring-border">
-                            <AvatarImage src={schedule.trainer.avatar} alt={schedule.trainer.name} />
+                            <AvatarImage src={schedule.trainer?.avatar} alt={trainerName} />
                             <AvatarFallback className="text-xs bg-muted">
                                 {trainerInitials}
                             </AvatarFallback>
                         </Avatar>
                         <div className="flex items-center gap-1.5 text-xs">
                             <User className="h-3 w-3 text-muted-foreground" />
-                            <span className="text-foreground">{schedule.trainer.name}</span>
+                            <span className="text-foreground">{trainerName}</span>
                         </div>
                     </div>
 

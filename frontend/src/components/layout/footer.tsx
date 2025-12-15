@@ -6,20 +6,11 @@ import { Dumbbell, Instagram, Twitter, Facebook, Youtube } from "lucide-react";
 const footerLinks = {
   company: [
     { label: "About Us", href: "/about" },
-    { label: "Careers", href: "/careers" },
-    { label: "Press", href: "/press" },
-    { label: "Blog", href: "/blog" },
-  ],
-  support: [
-    { label: "Help Center", href: "/help" },
     { label: "Contact Us", href: "/contact" },
-    { label: "FAQs", href: "/faqs" },
-    { label: "Community", href: "/community" },
   ],
   legal: [
     { label: "Privacy Policy", href: "/privacy" },
     { label: "Terms of Service", href: "/terms" },
-    { label: "Cookie Policy", href: "/cookies" },
   ],
 };
 
@@ -34,10 +25,10 @@ export function Footer() {
   return (
     <footer className="border-t border-border bg-card/50">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center gap-2 mb-4">
+            <Link href="/" className="inline-flex items-center gap-2 mb-4 min-h-[44px]">
               <Dumbbell className="h-8 w-8 text-primary" />
               <span className="font-[family-name:var(--font-bebas)] text-2xl tracking-wider">
                 IRON<span className="text-primary">FORGE</span>
@@ -48,14 +39,14 @@ export function Footer() {
               experience with state-of-the-art equipment and expert trainers.
             </p>
             {/* Social Links */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
               {socialLinks.map((social) => (
                 <a
                   key={social.label}
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-primary transition-colors"
+                  className="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center text-muted-foreground hover:text-primary transition-colors"
                   aria-label={social.label}
                 >
                   <social.icon className="h-5 w-5" />
@@ -66,34 +57,15 @@ export function Footer() {
 
           {/* Company Links */}
           <div>
-            <h4 className="font-semibold mb-4 text-sm uppercase tracking-wider">
+            <h3 className="font-semibold mb-4 text-sm uppercase tracking-wider">
               Company
-            </h4>
-            <ul className="space-y-3">
+            </h3>
+            <ul className="space-y-1">
               {footerLinks.company.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Support Links */}
-          <div>
-            <h4 className="font-semibold mb-4 text-sm uppercase tracking-wider">
-              Support
-            </h4>
-            <ul className="space-y-3">
-              {footerLinks.support.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                    className="inline-block py-2 min-h-[44px] text-sm text-muted-foreground hover:text-primary transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -104,15 +76,15 @@ export function Footer() {
 
           {/* Legal Links */}
           <div>
-            <h4 className="font-semibold mb-4 text-sm uppercase tracking-wider">
+            <h3 className="font-semibold mb-4 text-sm uppercase tracking-wider">
               Legal
-            </h4>
-            <ul className="space-y-3">
+            </h3>
+            <ul className="space-y-1">
               {footerLinks.legal.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                    className="inline-block py-2 min-h-[44px] text-sm text-muted-foreground hover:text-primary transition-colors"
                   >
                     {link.label}
                   </Link>

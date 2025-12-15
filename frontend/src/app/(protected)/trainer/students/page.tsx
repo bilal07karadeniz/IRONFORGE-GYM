@@ -15,10 +15,18 @@ export default function TrainerStudentsPage() {
         // In real app, fetch from trainerApi.getStudents()
         setIsLoading(false);
         setStudents([
-            { id: "1", firstName: "Alice", lastName: "Wonder", email: "alice@example.com", phone: "555-0123", avatar: "", membershipType: "premium" } as any,
-            { id: "2", firstName: "Bob", lastName: "Builder", email: "bob@example.com", phone: "555-9876", avatar: "", membershipType: "basic" } as any,
+            { id: "1", full_name: "Alice Wonder", email: "alice@example.com", phone: "555-0123", avatar: "", membershipType: "premium" } as any,
+            { id: "2", full_name: "Bob Builder", email: "bob@example.com", phone: "555-9876", avatar: "", membershipType: "basic" } as any,
         ]);
     }, []);
+
+    const getInitials = (fullName: string) => {
+        const parts = fullName.trim().split(/\s+/);
+        if (parts.length >= 2) {
+            return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
+        }
+        return fullName.slice(0, 2).toUpperCase();
+    };
 
     const columns = [
         {
@@ -27,10 +35,10 @@ export default function TrainerStudentsPage() {
                 <div className="flex items-center gap-3">
                     <Avatar className="h-10 w-10">
                         <AvatarImage src={user.avatar} />
-                        <AvatarFallback>{user.firstName[0]}{user.lastName[0]}</AvatarFallback>
+                        <AvatarFallback>{getInitials(user.full_name)}</AvatarFallback>
                     </Avatar>
                     <div>
-                        <p className="font-medium">{user.firstName} {user.lastName}</p>
+                        <p className="font-medium">{user.full_name}</p>
                         <p className="text-xs text-muted-foreground">{user.membershipType} member</p>
                     </div>
                 </div>

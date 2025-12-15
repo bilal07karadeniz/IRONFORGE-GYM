@@ -73,7 +73,7 @@ export function QRCodeDisplay({ booking, size = 256, className }: QRCodeDisplayP
 
                     <div className="text-center">
                         <h3 className="font-semibold text-lg mb-1">{booking.class.name}</h3>
-                        <p className="text-sm text-muted-foreground">{booking.schedule.trainer.name}</p>
+                        <p className="text-sm text-muted-foreground">{booking.schedule.trainer?.name || booking.schedule.trainer?.full_name || 'Unknown'}</p>
                     </div>
 
                     <Separator />

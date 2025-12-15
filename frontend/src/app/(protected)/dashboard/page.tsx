@@ -86,7 +86,7 @@ export default function DashboardPage() {
       <div className="mb-8 animate-slide-up">
         <h1 className="font-[family-name:var(--font-bebas)] text-4xl md:text-5xl tracking-wide mb-2">
           WELCOME BACK,{" "}
-          <span className="gradient-text">{user?.firstName?.toUpperCase()}</span>
+          <span className="gradient-text">{user?.full_name?.split(' ')[0]?.toUpperCase()}</span>
         </h1>
         <p className="text-muted-foreground">
           Ready to crush your goals today? Here&apos;s your fitness overview.
@@ -140,7 +140,7 @@ export default function DashboardPage() {
               <CardTitle className="font-[family-name:var(--font-bebas)] text-2xl tracking-wide">
                 UPCOMING SESSIONS
               </CardTitle>
-              <Link href="/bookings">
+              <Link href="/my-bookings">
                 <Button variant="ghost" size="sm">
                   View All
                   <ChevronRight className="ml-1 h-4 w-4" />
@@ -215,11 +215,6 @@ export default function DashboardPage() {
                   </div>
                 ))}
               </div>
-              <Link href="/achievements" className="block mt-4">
-                <Button variant="outline" className="w-full" size="sm">
-                  View All Achievements
-                </Button>
-              </Link>
             </CardContent>
           </Card>
 
@@ -240,13 +235,13 @@ export default function DashboardPage() {
                   Book New Session
                 </Button>
               </Link>
-              <Link href="/trainers" className="block">
+              <Link href="/classes" className="block">
                 <Button
                   variant="outline"
                   className="w-full justify-start h-12"
                 >
                   <Dumbbell className="mr-3 h-5 w-5 text-primary" />
-                  Browse Trainers
+                  Browse Classes
                 </Button>
               </Link>
               <Link href="/profile" className="block">

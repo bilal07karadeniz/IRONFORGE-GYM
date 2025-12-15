@@ -125,3 +125,34 @@ build_log.txt
 # Local development scripts
 *.local.sh
 *.local.js
+
+# ============================================
+# Testing & Screenshots
+# ============================================
+screenshots/
+test-reports/
+playwright-report/
+test-results/
+
+# ============================================
+# AI Tools & Assistants
+# ============================================
+.claude/
+.cursor/
+.aider*
+.copilot/
+
+# ============================================
+# Windows Artifacts
+# ============================================
+nul
+NUL
+
+# ============================================
+# Debug Files
+# ============================================
+.eslintcache
+.stylelintcache
+*.pid
+*.seed
+*.pid.lock

@@ -119,7 +119,8 @@ export default function ScheduleDetailPage() {
     const canBook = !isFull && !isPastSchedule;
     const canJoinWaitlist = isFull && !isPastSchedule;
 
-    const trainerInitials = schedule.trainer.name
+    const trainerName = schedule.trainer?.name || schedule.trainer?.full_name || 'Unknown';
+    const trainerInitials = trainerName
         .split(' ')
         .map(n => n[0])
         .join('')
@@ -222,13 +223,13 @@ export default function ScheduleDetailPage() {
                             <h2 className="text-2xl font-semibold mb-6">Your Trainer</h2>
                             <div className="flex items-start gap-4">
                                 <Avatar className="h-20 w-20 ring-2 ring-primary">
-                                    <AvatarImage src={schedule.trainer.avatar} alt={schedule.trainer.name} />
+                                    <AvatarImage src={schedule.trainer?.avatar} alt={trainerName} />
                                     <AvatarFallback className="text-xl bg-muted">
                                         {trainerInitials}
                                     </AvatarFallback>
                                 </Avatar>
                                 <div className="flex-1">
-                                    <h3 className="text-xl font-semibold mb-1">{schedule.trainer.name}</h3>
+                                    <h3 className="text-xl font-semibold mb-1">{trainerName}</h3>
                                     <p className="text-primary font-medium mb-2">{schedule.trainer.specialization}</p>
                                     {schedule.trainer.bio && (
                                         <p className="text-muted-foreground">{schedule.trainer.bio}</p>
