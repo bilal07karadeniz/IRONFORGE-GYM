@@ -119,12 +119,16 @@ export default function ScheduleDetailPage() {
     const canBook = !isFull && !isPastSchedule;
     const canJoinWaitlist = isFull && !isPastSchedule;
 
-    const trainerName = schedule.trainer?.name || schedule.trainer?.full_name || 'Unknown';
-    const trainerInitials = trainerName
-        .split(' ')
-        .map(n => n[0])
-        .join('')
-        .toUpperCase();
+    const trainerName = schedule.trainer?.name || schedule.trainer?.full_name || 'Unknown Trainer';
+    const getInitials = (name: string) => {
+        if (!name || name.trim().length === 0) return 'UT';
+        const parts = name.trim().split(/\s+/).filter(p => p.length > 0);
+        if (parts.length >= 2) {
+            return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
+        }
+        return name.slice(0, 2).toUpperCase();
+    };
+    const trainerInitials = getInitials(trainerName);
 
     const formattedDate = format(parseISO(schedule.date), 'EEEE, MMMM d, yyyy');
 
@@ -145,8 +149,8 @@ export default function ScheduleDetailPage() {
             {/* Hero Image */}
             <div className="relative h-96 overflow-hidden">
                 <img
-                    src={schedule.class.image}
-                    alt={schedule.class.name}
+                    src={schedule.class?.image || 'https://placehold.co/1200x400?text=Class'}
+                    alt={schedule.class?.name || 'Class'}
                     className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
@@ -155,7 +159,7 @@ export default function ScheduleDetailPage() {
                 <div className="absolute bottom-0 left-0 right-0">
                     <div className="container mx-auto px-4 pb-8">
                         <div className="flex flex-wrap items-end gap-4 mb-4">
-                            <CategoryBadge category={schedule.class.category} className="text-sm px-4 py-2" />
+                            {schedule.class?.category && <CategoryBadge category={schedule.class.category} className="text-sm px-4 py-2" />}
                             {isPastSchedule && (
                                 <div className="px-4 py-2 bg-muted rounded-full">
                                     <span className="text-sm font-semibold text-muted-foreground">Past Schedule</span>
@@ -168,7 +172,7 @@ export default function ScheduleDetailPage() {
                             )}
                         </div>
                         <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-2 gradient-text">
-                            {schedule.class.name}
+                            {schedule.class?.name || 'Unknown Class'}
                         </h1>
                     </div>
                 </div>
@@ -214,7 +218,7 @@ export default function ScheduleDetailPage() {
                                 About This Class
                             </h2>
                             <p className="text-muted-foreground leading-relaxed">
-                                {schedule.class.description}
+                                {schedule.class?.description || 'No description available.'}
                             </p>
                         </Card>
 
@@ -230,9 +234,9 @@ export default function ScheduleDetailPage() {
                                 </Avatar>
                                 <div className="flex-1">
                                     <h3 className="text-xl font-semibold mb-1">{trainerName}</h3>
-                                    <p className="text-primary font-medium mb-2">{schedule.trainer.specialization}</p>
-                                    {schedule.trainer.bio && (
-                                        <p className="text-muted-foreground">{schedule.trainer.bio}</p>
+                                    <p className="text-primary font-medium mb-2">{schedule.trainer?.specialization}</p>
+                                    {schedule.trainer?.bio && (
+                                        <p className="text-muted-foreground">{schedule.trainer?.bio}</p>
                                     )}
                                 </div>
                             </div>

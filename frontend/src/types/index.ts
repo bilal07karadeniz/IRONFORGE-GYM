@@ -138,7 +138,13 @@ export type ClassCategory =
   | 'flexibility'
   | 'sports'
   | 'martial-arts'
-  | 'dance';
+  | 'dance'
+  | 'crossfit'
+  | 'swimming'
+  | 'spinning'
+  | 'pilates'
+  | 'boxing'
+  | 'other';
 
 export type ClassSortOption = 'name' | 'popularity' | 'duration';
 

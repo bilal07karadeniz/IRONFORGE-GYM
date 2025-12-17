@@ -83,7 +83,8 @@ export default function AdminUsersPage() {
         }
     };
 
-    const getInitials = (fullName: string) => {
+    const getInitials = (fullName?: string | null) => {
+        if (!fullName) return "??";
         const parts = fullName.trim().split(/\s+/);
         if (parts.length >= 2) {
             return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
@@ -92,8 +93,8 @@ export default function AdminUsersPage() {
     };
 
     const filteredUsers = users.filter(user =>
-        user.full_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.email.toLowerCase().includes(searchTerm.toLowerCase())
+        (user.full_name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (user.email || '').toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     const columns = [

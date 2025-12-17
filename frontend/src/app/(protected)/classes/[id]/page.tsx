@@ -71,12 +71,16 @@ export default function ClassDetailPage() {
     const isNearlyFull = enrollmentPercentage >= 80;
     const spotsLeft = gymClass.capacity - gymClass.enrolled;
 
-    const trainerName = gymClass.trainer?.name || gymClass.trainer?.full_name || 'Unknown';
-    const trainerInitials = trainerName
-        .split(' ')
-        .map(n => n[0])
-        .join('')
-        .toUpperCase();
+    const trainerName = gymClass.trainer?.name || gymClass.trainer?.full_name || 'Unknown Trainer';
+    const getInitials = (name: string) => {
+        if (!name || name.trim().length === 0) return 'UT';
+        const parts = name.trim().split(/\s+/).filter(p => p.length > 0);
+        if (parts.length >= 2) {
+            return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
+        }
+        return name.slice(0, 2).toUpperCase();
+    };
+    const trainerInitials = getInitials(trainerName);
 
     return (
         <div className="min-h-screen bg-background">
@@ -148,16 +152,16 @@ export default function ClassDetailPage() {
                                 </Avatar>
                                 <div className="flex-1">
                                     <h3 className="text-xl font-semibold mb-1">{trainerName}</h3>
-                                    <p className="text-primary font-medium mb-2">{gymClass.trainer.specialization}</p>
-                                    {gymClass.trainer.rating && (
+                                    <p className="text-primary font-medium mb-2">{gymClass.trainer?.specialization}</p>
+                                    {gymClass.trainer?.rating && (
                                         <div className="flex items-center gap-2 mb-3">
                                             <Star className="h-4 w-4 fill-primary text-primary" />
-                                            <span className="font-semibold">{gymClass.trainer.rating}</span>
+                                            <span className="font-semibold">{gymClass.trainer?.rating}</span>
                                             <span className="text-muted-foreground text-sm">rating</span>
                                         </div>
                                     )}
-                                    {gymClass.trainer.bio && (
-                                        <p className="text-muted-foreground">{gymClass.trainer.bio}</p>
+                                    {gymClass.trainer?.bio && (
+                                        <p className="text-muted-foreground">{gymClass.trainer?.bio}</p>
                                     )}
                                 </div>
                             </div>

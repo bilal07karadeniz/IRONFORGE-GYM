@@ -66,7 +66,7 @@ export function ClassForm({
             image: initialData.image,
             duration: initialData.duration,
             capacity: initialData.capacity,
-            trainerId: initialData.trainer.id,
+            trainerId: initialData.trainer?.id,
         } : {
             duration: 60,
             capacity: 20,
@@ -130,7 +130,7 @@ export function ClassForm({
 
                     <div className="space-y-2">
                         <Label htmlFor="trainer">Default Trainer</Label>
-                        <Select onValueChange={(val) => setValue("trainerId", val)} defaultValue={initialData?.trainer.id}>
+                        <Select onValueChange={(val) => setValue("trainerId", val)} defaultValue={initialData?.trainer?.id}>
                             <SelectTrigger>
                                 <SelectValue placeholder="Select trainer" />
                             </SelectTrigger>

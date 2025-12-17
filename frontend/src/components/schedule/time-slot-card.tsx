@@ -30,12 +30,16 @@ export function TimeSlotCard({
     const canBook = !isFull && !isPastSchedule && !isBooked;
     const canJoinWaitlist = isFull && !isPastSchedule && !isBooked;
 
-    const trainerName = schedule.trainer?.name || schedule.trainer?.full_name || 'Unknown';
-    const trainerInitials = trainerName
-        .split(' ')
-        .map(n => n[0])
-        .join('')
-        .toUpperCase();
+    const trainerName = schedule.trainer?.name || schedule.trainer?.full_name || 'Unknown Trainer';
+    const getInitials = (name: string) => {
+        if (!name || name.trim().length === 0) return 'UT';
+        const parts = name.trim().split(/\s+/).filter(p => p.length > 0);
+        if (parts.length >= 2) {
+            return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
+        }
+        return name.slice(0, 2).toUpperCase();
+    };
+    const trainerInitials = getInitials(trainerName);
 
     const formattedDate = format(parseISO(schedule.date), 'EEE, MMM d');
 
@@ -61,7 +65,7 @@ export function TimeSlotCard({
                         <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 mb-1">
                                 <h3 className="font-semibold text-base text-foreground line-clamp-1">
-                                    {schedule.class.name}
+                                    {schedule.class?.name || 'Unknown Class'}
                                 </h3>
                                 {isBooked && (
                                     <div className="flex items-center gap-1 px-2 py-0.5 bg-primary/20 rounded-full">
@@ -75,7 +79,7 @@ export function TimeSlotCard({
                                 <span>{formattedDate}</span>
                             </div>
                         </div>
-                        <CategoryBadge category={schedule.class.category} className="shrink-0" />
+                        {schedule.class?.category && <CategoryBadge category={schedule.class.category} className="shrink-0" />}
                     </div>
 
                     {/* Trainer */}

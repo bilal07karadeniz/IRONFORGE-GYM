@@ -96,8 +96,8 @@ export default function WaitingListPage() {
                                 <div className="flex gap-4">
                                     {/* Class Image */}
                                     <img
-                                        src={entry.schedule.class.image}
-                                        alt={entry.schedule.class.name}
+                                        src={entry.schedule?.class?.image || 'https://placehold.co/96x96?text=Class'}
+                                        alt={entry.schedule?.class?.name || 'Class'}
                                         className="w-24 h-24 object-cover rounded-lg"
                                     />
 
@@ -108,9 +108,9 @@ export default function WaitingListPage() {
                                             <div>
                                                 <div className="flex items-center gap-2 mb-1">
                                                     <h3 className="font-semibold text-lg">
-                                                        {entry.schedule.class.name}
+                                                        {entry.schedule?.class?.name || 'Unknown Class'}
                                                     </h3>
-                                                    <CategoryBadge category={entry.schedule.class.category} />
+                                                    {entry.schedule?.class?.category && <CategoryBadge category={entry.schedule.class.category} />}
                                                 </div>
                                                 {entry.position && (
                                                     <Badge variant="outline" className="bg-yellow-500/20 text-yellow-500 border-yellow-500/30">
@@ -124,15 +124,15 @@ export default function WaitingListPage() {
                                         <div className="grid grid-cols-2 gap-2 text-sm">
                                             <div className="flex items-center gap-2">
                                                 <Calendar className="h-4 w-4 text-muted-foreground" />
-                                                <span>{format(parseISO(entry.schedule.date), 'EEE, MMM d, yyyy')}</span>
+                                                <span>{entry.schedule?.date ? format(parseISO(entry.schedule.date), 'EEE, MMM d, yyyy') : 'N/A'}</span>
                                             </div>
                                             <div className="flex items-center gap-2">
                                                 <Clock className="h-4 w-4 text-muted-foreground" />
-                                                <span>{entry.schedule.startTime} - {entry.schedule.endTime}</span>
+                                                <span>{entry.schedule?.startTime || 'N/A'} - {entry.schedule?.endTime || 'N/A'}</span>
                                             </div>
                                             <div className="flex items-center gap-2">
                                                 <Users className="h-4 w-4 text-muted-foreground" />
-                                                <span>Full ({entry.schedule.capacity} capacity)</span>
+                                                <span>Full ({entry.schedule?.capacity || 0} capacity)</span>
                                             </div>
                                         </div>
 

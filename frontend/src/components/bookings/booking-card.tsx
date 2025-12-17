@@ -46,14 +46,21 @@ export function BookingCard({
     const [showCancelDialog, setShowCancelDialog] = useState(false);
     const [isCancelling, setIsCancelling] = useState(false);
 
-    const trainerName = booking.schedule.trainer?.name || booking.schedule.trainer?.full_name || 'Unknown';
-    const trainerInitials = trainerName
-        .split(' ')
-        .map(n => n[0])
-        .join('')
-        .toUpperCase();
+    const trainerName = booking.schedule?.trainer?.name || booking.schedule?.trainer?.full_name || 'Unknown Trainer';
+    const getInitials = (name: string) => {
+        if (!name || name.trim().length === 0) return 'UT';
+        const parts = name.trim().split(/\s+/).filter(p => p.length > 0);
+        if (parts.length >= 2) {
+            return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
+        }
+        return name.slice(0, 2).toUpperCase();
+    };
+    const trainerInitials = getInitials(trainerName);
 
-    const bookingDateTime = parseISO(`${booking.schedule.date}T${booking.schedule.startTime}`);
+    const scheduleDate = booking.schedule?.date || booking.date;
+    const scheduleStartTime = booking.schedule?.startTime || '00:00';
+    const scheduleEndTime = booking.schedule?.endTime || '00:00';
+    const bookingDateTime = parseISO(`${scheduleDate}T${scheduleStartTime}`);
     const formattedDate = format(bookingDateTime, 'EEE, MMM d, yyyy');
     const hoursUntil = differenceInHours(bookingDateTime, new Date());
     const canCancel = hoursUntil > 2 && booking.status === 'confirmed';
@@ -94,8 +101,8 @@ export function BookingCard({
                     {/* Class Image */}
                     <div className="shrink-0">
                         <img
-                            src={booking.class.image}
-                            alt={booking.class.name}
+                            src={booking.class?.image || 'https://placehold.co/96x96?text=Class'}
+                            alt={booking.class?.name || 'Class'}
                             className="w-24 h-24 object-cover rounded-lg"
                         />
                     </div>
@@ -107,13 +114,13 @@ export function BookingCard({
                             <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-2 mb-1 flex-wrap">
                                     <h3 className="font-semibold text-base text-foreground line-clamp-1">
-                                        {booking.class.name}
+                                        {booking.class?.name || 'Unknown Class'}
                                     </h3>
                                     <Badge variant="outline" className={cn("border", status.className)}>
                                         {status.label}
                                     </Badge>
                                 </div>
-                                <CategoryBadge category={booking.class.category} className="mb-2" />
+                                {booking.class?.category && <CategoryBadge category={booking.class.category} className="mb-2" />}
                             </div>
                         </div>
 
@@ -125,11 +132,11 @@ export function BookingCard({
                             </div>
                             <div className="flex items-center gap-2">
                                 <Clock className="h-4 w-4 text-muted-foreground" />
-                                <span>{booking.schedule.startTime} - {booking.schedule.endTime}</span>
+                                <span>{scheduleStartTime} - {scheduleEndTime}</span>
                             </div>
                             <div className="flex items-center gap-2">
                                 <Avatar className="h-4 w-4 ring-1 ring-border">
-                                    <AvatarImage src={booking.schedule.trainer?.avatar} />
+                                    <AvatarImage src={booking.schedule?.trainer?.avatar} />
                                     <AvatarFallback className="text-xs">{trainerInitials}</AvatarFallback>
                                 </Avatar>
                                 <span className="line-clamp-1">{trainerName}</span>
@@ -159,11 +166,11 @@ export function BookingCard({
                                     Cancel
                                 </Button>
                             )}
-                            {booking.status === 'completed' && onRebook && (
+                            {booking.status === 'completed' && onRebook && booking.class?.id && (
                                 <Button
                                     size="sm"
                                     variant="outline"
-                                    onClick={() => onRebook(booking.class.id)}
+                                    onClick={() => onRebook(booking.class!.id)}
                                 >
                                     <RotateCcw className="h-4 w-4 mr-2" />
                                     Re-book
@@ -185,7 +192,7 @@ export function BookingCard({
                     <AlertDialogHeader>
                         <AlertDialogTitle>Cancel Booking?</AlertDialogTitle>
                         <AlertDialogDescription>
-                            Are you sure you want to cancel your booking for {booking.class.name} on {formattedDate}?
+                            Are you sure you want to cancel your booking for {booking.class?.name || 'this class'} on {formattedDate}?
                             This action cannot be undone.
                         </AlertDialogDescription>
                     </AlertDialogHeader>

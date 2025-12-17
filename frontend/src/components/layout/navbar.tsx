@@ -25,17 +25,39 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
-const navLinks = [
+const baseNavLinks = [
   { href: "/dashboard", label: "Dashboard" },
-  { href: "/bookings", label: "My Bookings" },
+  { href: "/my-bookings", label: "My Bookings" },
   { href: "/schedule", label: "Schedule" },
-  { href: "/trainers", label: "Trainers" },
+  { href: "/classes", label: "Classes" },
+];
+
+const adminNavLinks = [
+  { href: "/admin/dashboard", label: "Admin Dashboard" },
+  { href: "/admin/users", label: "Users" },
+  { href: "/admin/classes", label: "Manage Classes" },
+  { href: "/admin/schedules", label: "Schedules" },
+  { href: "/admin/bookings", label: "All Bookings" },
+];
+
+const trainerNavLinks = [
+  { href: "/trainer/dashboard", label: "Trainer Dashboard" },
+  { href: "/trainer/students", label: "My Students" },
 ];
 
 export function Navbar() {
   const { user, isAuthenticated, logout } = useAuth();
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Get role-based navigation links
+  const getNavLinks = () => {
+    if (user?.role === 'admin') return adminNavLinks;
+    if (user?.role === 'trainer') return trainerNavLinks;
+    return baseNavLinks;
+  };
+
+  const navLinks = getNavLinks();
 
   const getInitials = (fullName?: string) => {
     if (!fullName) return "";
@@ -123,13 +145,13 @@ export function Navbar() {
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <Link href="/bookings" className="cursor-pointer">
+                      <Link href="/my-bookings" className="cursor-pointer">
                         <Calendar className="mr-2 h-4 w-4" />
                         My Bookings
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <Link href="/settings" className="cursor-pointer">
+                      <Link href="/profile" className="cursor-pointer">
                         <Settings className="mr-2 h-4 w-4" />
                         Settings
                       </Link>
@@ -200,7 +222,7 @@ export function Navbar() {
                       {/* Bottom Actions */}
                       <div className="mt-auto pt-6 border-t border-border space-y-2">
                         <Link
-                          href="/settings"
+                          href="/profile"
                           onClick={() => setMobileMenuOpen(false)}
                           className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-all"
                         >

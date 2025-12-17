@@ -15,7 +15,10 @@ interface QRCodeDisplayProps {
 }
 
 export function QRCodeDisplay({ booking, size = 256, className }: QRCodeDisplayProps) {
-    const bookingDateTime = parseISO(`${booking.schedule.date}T${booking.schedule.startTime}`);
+    const scheduleDate = booking.schedule?.date || booking.date;
+    const scheduleStartTime = booking.schedule?.startTime || '00:00';
+    const scheduleEndTime = booking.schedule?.endTime || '00:00';
+    const bookingDateTime = parseISO(`${scheduleDate}T${scheduleStartTime}`);
     const formattedDate = format(bookingDateTime, 'EEEE, MMMM d, yyyy');
 
     // QR code data - typically booking ID or verification code
@@ -72,8 +75,8 @@ export function QRCodeDisplay({ booking, size = 256, className }: QRCodeDisplayP
                     <Separator />
 
                     <div className="text-center">
-                        <h3 className="font-semibold text-lg mb-1">{booking.class.name}</h3>
-                        <p className="text-sm text-muted-foreground">{booking.schedule.trainer?.name || booking.schedule.trainer?.full_name || 'Unknown'}</p>
+                        <h3 className="font-semibold text-lg mb-1">{booking.class?.name || 'Class'}</h3>
+                        <p className="text-sm text-muted-foreground">{booking.schedule?.trainer?.name || booking.schedule?.trainer?.full_name || 'Unknown'}</p>
                     </div>
 
                     <Separator />
@@ -85,7 +88,7 @@ export function QRCodeDisplay({ booking, size = 256, className }: QRCodeDisplayP
                         </div>
                         <div className="flex items-center gap-2">
                             <Clock className="h-4 w-4 text-muted-foreground" />
-                            <span>{booking.schedule.startTime} - {booking.schedule.endTime}</span>
+                            <span>{scheduleStartTime} - {scheduleEndTime}</span>
                         </div>
                     </div>
 

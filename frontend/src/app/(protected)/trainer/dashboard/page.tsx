@@ -93,13 +93,13 @@ export default function TrainerDashboardPage() {
                         <CardHeader>
                             <div className="flex justify-between items-start">
                                 <div>
-                                    <CardTitle>{schedule.class.name}</CardTitle>
+                                    <CardTitle>{schedule.class?.name || 'Unknown Class'}</CardTitle>
                                     <p className="text-sm text-muted-foreground mt-1">
                                         {format(parseISO(schedule.date), 'EEEE, MMM d')}
                                     </p>
                                 </div>
                                 <div className="px-2 py-1 bg-primary/10 rounded text-xs font-medium text-primary uppercase">
-                                    {schedule.class.category}
+                                    {schedule.class?.category || 'N/A'}
                                 </div>
                             </div>
                         </CardHeader>

@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { ClassCategory } from "@/types";
 
 interface CategoryBadgeProps {
-    category: ClassCategory;
+    category: ClassCategory | null | undefined;
     isActive?: boolean;
     onClick?: () => void;
     className?: string;
@@ -45,8 +45,74 @@ const categoryConfig: Record<ClassCategory, { label: string; color: string; acti
         label: "Dance",
         color: "bg-cyan-500/10 text-cyan-400 border-cyan-500/20",
         activeColor: "bg-cyan-500 text-white border-cyan-500 glow-cyan"
+    },
+    crossfit: {
+        label: "CrossFit",
+        color: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+        activeColor: "bg-emerald-500 text-white border-emerald-500 glow-emerald"
+    },
+    swimming: {
+        label: "Swimming",
+        color: "bg-sky-500/10 text-sky-400 border-sky-500/20",
+        activeColor: "bg-sky-500 text-white border-sky-500 glow-sky"
+    },
+    spinning: {
+        label: "Spinning",
+        color: "bg-amber-500/10 text-amber-400 border-amber-500/20",
+        activeColor: "bg-amber-500 text-white border-amber-500 glow-amber"
+    },
+    pilates: {
+        label: "Pilates",
+        color: "bg-violet-500/10 text-violet-400 border-violet-500/20",
+        activeColor: "bg-violet-500 text-white border-violet-500 glow-violet"
+    },
+    boxing: {
+        label: "Boxing",
+        color: "bg-rose-500/10 text-rose-400 border-rose-500/20",
+        activeColor: "bg-rose-500 text-white border-rose-500 glow-rose"
+    },
+    other: {
+        label: "Other",
+        color: "bg-slate-500/10 text-slate-400 border-slate-500/20",
+        activeColor: "bg-slate-500 text-white border-slate-500 glow-slate"
     }
 };
+
+// Default fallback for unknown categories
+const defaultConfig = {
+    label: "Other",
+    color: "bg-gray-500/10 text-gray-400 border-gray-500/20",
+    activeColor: "bg-gray-500 text-white border-gray-500 glow-gray"
+};
+
+/**
+ * Get category configuration with fallback for unknown categories
+ * Logs warning in development if category is not found
+ */
+function getCategoryConfig(category: ClassCategory | null | undefined) {
+    // Handle null/undefined
+    if (!category) {
+        if (process.env.NODE_ENV === 'development') {
+            console.warn('[CategoryBadge] Category is null or undefined');
+        }
+        return defaultConfig;
+    }
+
+    // Get config, fallback to default if not found
+    const config = categoryConfig[category as ClassCategory];
+
+    if (!config) {
+        if (process.env.NODE_ENV === 'development') {
+            console.warn(`[CategoryBadge] Unknown category: "${category}". Using default config.`);
+        }
+        return {
+            ...defaultConfig,
+            label: category.charAt(0).toUpperCase() + category.slice(1).replace(/-/g, ' ')
+        };
+    }
+
+    return config;
+}
 
 export function CategoryBadge({
     category,
@@ -54,7 +120,7 @@ export function CategoryBadge({
     onClick,
     className
 }: CategoryBadgeProps) {
-    const config = categoryConfig[category];
+    const config = getCategoryConfig(category);
     const isInteractive = !!onClick;
 
     return (

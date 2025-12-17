@@ -48,12 +48,16 @@ export function BookingModal({
 
     if (!schedule) return null;
 
-    const trainerName = schedule.trainer?.name || schedule.trainer?.full_name || 'Unknown';
-    const trainerInitials = trainerName
-        .split(' ')
-        .map(n => n[0])
-        .join('')
-        .toUpperCase();
+    const trainerName = schedule.trainer?.name || schedule.trainer?.full_name || 'Unknown Trainer';
+    const getInitials = (name: string) => {
+        if (!name || name.trim().length === 0) return 'UT';
+        const parts = name.trim().split(/\s+/).filter(p => p.length > 0);
+        if (parts.length >= 2) {
+            return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
+        }
+        return name.slice(0, 2).toUpperCase();
+    };
+    const trainerInitials = getInitials(trainerName);
 
     const formattedDate = format(parseISO(schedule.date), 'EEEE, MMMM d, yyyy');
 
@@ -134,15 +138,15 @@ export function BookingModal({
                             <div className="space-y-3">
                                 <div className="flex items-start gap-3">
                                     <img
-                                        src={schedule.class.image}
-                                        alt={schedule.class.name}
+                                        src={schedule.class?.image || 'https://placehold.co/80x80?text=Class'}
+                                        alt={schedule.class?.name || 'Class'}
                                         className="w-20 h-20 object-cover rounded-lg"
                                     />
                                     <div className="flex-1 min-w-0">
                                         <h4 className="font-semibold text-base mb-1 line-clamp-1">
-                                            {schedule.class.name}
+                                            {schedule.class?.name || 'Unknown Class'}
                                         </h4>
-                                        <CategoryBadge category={schedule.class.category} />
+                                        {schedule.class?.category && <CategoryBadge category={schedule.class.category} />}
                                     </div>
                                 </div>
 

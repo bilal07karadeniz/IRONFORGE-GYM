@@ -17,12 +17,16 @@ export function ClassCard({ gymClass, className }: ClassCardProps) {
     const enrollmentPercentage = (gymClass.enrolled / gymClass.capacity) * 100;
     const isNearlyFull = enrollmentPercentage >= 80;
 
-    const trainerName = gymClass.trainer?.name || gymClass.trainer?.full_name || 'Unknown';
-    const trainerInitials = trainerName
-        .split(' ')
-        .map(n => n[0])
-        .join('')
-        .toUpperCase();
+    const trainerName = gymClass.trainer?.name || gymClass.trainer?.full_name || 'Unknown Trainer';
+    const getInitials = (name: string) => {
+        if (!name || name.trim().length === 0) return 'UT';
+        const parts = name.trim().split(/\s+/).filter(p => p.length > 0);
+        if (parts.length >= 2) {
+            return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
+        }
+        return name.slice(0, 2).toUpperCase();
+    };
+    const trainerInitials = getInitials(trainerName);
 
     return (
         <Link href={`/classes/${gymClass.id}`} className="block group">
@@ -75,7 +79,7 @@ export function ClassCard({ gymClass, className }: ClassCardProps) {
                                 {trainerName}
                             </p>
                             <p className="text-xs text-muted-foreground line-clamp-1">
-                                {gymClass.trainer.specialization}
+                                {gymClass.trainer?.specialization}
                             </p>
                         </div>
                     </div>

@@ -86,7 +86,7 @@ export default function AdminSchedulesPage() {
     const columns = [
         {
             header: "Class",
-            accessorKey: (item: Schedule) => item.class.name
+            accessorKey: (item: Schedule) => item.class?.name || 'Unknown Class'
         },
         {
             header: "Date",

@@ -36,7 +36,8 @@ interface ProfileFormProps {
 }
 
 // Helper to get initials from full name
-function getInitials(fullName: string): string {
+function getInitials(fullName?: string | null): string {
+    if (!fullName) return "??";
     const parts = fullName.trim().split(/\s+/);
     if (parts.length >= 2) {
         return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();

@@ -20,7 +20,8 @@ export default function TrainerStudentsPage() {
         ]);
     }, []);
 
-    const getInitials = (fullName: string) => {
+    const getInitials = (fullName?: string | null) => {
+        if (!fullName) return "??";
         const parts = fullName.trim().split(/\s+/);
         if (parts.length >= 2) {
             return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();

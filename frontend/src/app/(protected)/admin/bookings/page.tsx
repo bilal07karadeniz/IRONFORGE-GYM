@@ -61,9 +61,9 @@ export default function AdminBookingsPage() {
             header: "Class (Date)",
             accessorKey: (booking: BookingWithDetails) => (
                 <div>
-                    <p className="font-medium">{booking.class.name}</p>
+                    <p className="font-medium">{booking.class?.name || 'Unknown Class'}</p>
                     <p className="text-xs text-muted-foreground">
-                        {format(parseISO(booking.schedule.date), 'MMM d')} • {booking.schedule.startTime}
+                        {booking.schedule?.date ? format(parseISO(booking.schedule.date), 'MMM d') : 'N/A'} • {booking.schedule?.startTime || 'N/A'}
                     </p>
                 </div>
             )

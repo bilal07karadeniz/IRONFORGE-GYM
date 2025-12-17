@@ -61,8 +61,8 @@ export function ScheduleForm({
     } = useForm<ScheduleFormData>({
         resolver: zodResolver(scheduleSchema),
         defaultValues: initialData ? {
-            classId: initialData.class.id,
-            trainerId: initialData.trainer.id,
+            classId: initialData.class?.id,
+            trainerId: initialData.trainer?.id,
             date: initialData.date,
             startTime: initialData.startTime,
             endTime: initialData.endTime,
@@ -104,7 +104,7 @@ export function ScheduleForm({
                 <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-4 py-4">
                     <div className="space-y-2">
                         <Label htmlFor="class">Class</Label>
-                        <Select onValueChange={onClassChange} defaultValue={initialData?.class.id}>
+                        <Select onValueChange={onClassChange} defaultValue={initialData?.class?.id}>
                             <SelectTrigger>
                                 <SelectValue placeholder="Select class" />
                             </SelectTrigger>
@@ -138,7 +138,7 @@ export function ScheduleForm({
 
                     <div className="space-y-2">
                         <Label htmlFor="trainer">Trainer</Label>
-                        <Select onValueChange={(val) => setValue("trainerId", val)} defaultValue={initialData?.trainer.id}>
+                        <Select onValueChange={(val) => setValue("trainerId", val)} defaultValue={initialData?.trainer?.id}>
                             <SelectTrigger>
                                 <SelectValue placeholder="Select trainer" />
                             </SelectTrigger>
